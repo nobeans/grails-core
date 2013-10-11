@@ -16,18 +16,12 @@
 package org.codehaus.groovy.grails.web.binding
 
 import grails.util.GrailsNameUtils
-
 import groovy.transform.CompileStatic
-
-import java.util.Locale
-
 import org.grails.databinding.errors.BindingError
 import org.grails.databinding.events.DataBindingListenerAdapter
-import org.springframework.context.support.DefaultMessageSourceResolvable
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.validation.BindingResult
-import org.springframework.validation.Errors
 import org.springframework.validation.FieldError
 
 @CompileStatic
@@ -59,6 +53,8 @@ class GrailsWebDataBindingListener extends DataBindingListenerAdapter {
     }
 
     protected String getPropertyName(String className, String classAsPropertyName, String propertyName) {
+        if (!messageSource) return propertyName
+
         final Locale locale = LocaleContextHolder.getLocale()
         String propertyNameCode = className + '.' + propertyName + ".label"
         String resolvedPropertyName = messageSource.getMessage(propertyNameCode, null, propertyName, locale)
